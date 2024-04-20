@@ -1,8 +1,17 @@
 <?php
 
+function forget(){
+    ob_start();
+    include_once('D:\xamp\htdocs\wordpress_dashbord\wp-content\themes\superb-ecommerce\forget_custom_password.php');
+    $output = ob_get_clean(); 
+    return $output;
+}
+add_shortcode('forget','forget');
+
 function registration_form() {
     ob_start(); // Start output buffering
     include_once('registration-form-template.php');
+    $output = ob_get_clean(); // Get the output and clean the buffer
     return $output; // Return the HTML markup
 
 }

@@ -69,11 +69,15 @@ if (isset($_POST['submit'])) {
     </style>
 </head>
 <body>
+    <?php get_header(); ?>
     <form method="post" action="">
     <h2>Forgot Password</h2>
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
         <button type="submit" name="submit">Reset Password</button>
     </form>
+ 
 </body>
 </html>
+
+

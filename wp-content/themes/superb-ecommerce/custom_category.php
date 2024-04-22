@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-define('WP_USE_THEMES', false);
+// define('WP_USE_THEMES', false);
 require_once('D:\xamp\htdocs\wordpress_dashbord\wp-load.php');
 echo "<title>Category</title>";
 

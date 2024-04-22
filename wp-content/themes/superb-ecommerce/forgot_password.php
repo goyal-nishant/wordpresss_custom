@@ -64,6 +64,7 @@
         <input type="email" id="email" name="email" required>
         <button type="submit" name="submit">Reset Password</button>
     </form>
+   
 </body>
 </html>
 

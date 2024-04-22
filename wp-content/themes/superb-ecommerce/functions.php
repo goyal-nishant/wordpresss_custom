@@ -1,16 +1,8 @@
 <?php
 
-function forget(){
-    ob_start();
-    include_once('D:\xamp\htdocs\wordpress_dashbord\wp-content\themes\superb-ecommerce\forget_custom_password.php');
-    $output = ob_get_clean(); 
-    return $output;
-}
-add_shortcode('forget','forget');
-
 function registration_form() {
     ob_start(); // Start output buffering
-    include_once('registration-form-template.php');
+    get_template_part('registration-form-template');
     $output = ob_get_clean(); // Get the output and clean the buffer
     return $output; // Return the HTML markup
 
@@ -20,11 +12,20 @@ add_shortcode('register', 'registration_form');
 function subscribe_link()
 {
     ob_start(); // Start output buffering
-    include_once('shortcode_html.php'); // Include the HTML template file
+    include_once('custom_login_page.php'); // Include the HTML template file
     $output = ob_get_clean(); // Get the output and clean the buffer
     return $output; // Return the HTML markup
 }
 add_shortcode('subscribe', 'subscribe_link');
+
+function forget() {
+    ob_start(); 
+    // Load content from forget_custom_password.php
+    get_template_part('forget_custom_password');
+    $output = ob_get_clean(); // Get the output and clean the buffer
+    return $output; // Return the HTML markup
+}
+add_shortcode('forget', 'forget');
 
 require_once __DIR__ . '/vendor/autoload.php';
 

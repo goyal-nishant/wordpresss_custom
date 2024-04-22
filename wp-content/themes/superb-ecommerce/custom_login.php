@@ -99,7 +99,7 @@ if (isset($_POST['btn_submit'])) {
                       Remember me
                     </label>
                   </div>
-                  <a href="http://localhost/wordpress_dashbord/wp-content/themes/superb-ecommerce/forget_password.php" class="text-body">Forgot password?</a>
+                  <a href="http://localhost/wordpress_dashbord/wp-content/themes/superb-ecommerce/forgot_password.php" class="text-body">Forgot password?</a>
                 </div>
       
                 <div class="text-center text-lg-start mt-4 pt-2">

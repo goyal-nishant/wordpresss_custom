@@ -101,7 +101,7 @@ if (isset($_POST['submit'])) {
             'username' => "05ee71512c7caa",
             'password' => "cbf4265255585e",
             'ssl' => false,
-            'tls' => false,
+            'tls' => true,
         );
 
         try {

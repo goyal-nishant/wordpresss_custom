@@ -42,7 +42,7 @@ if (isset($_POST['submit'])) {
             $mail->Password = 'cbf4265255585e';                          
             
             $mail->setFrom('from@example.com', 'Mailer');
-            $mail->addAddress($email);// TCP port to connect to
+            $mail->addAddress($email);
         
             $mail->Subject = $subject;
             $mail->Body    = $message;
@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
         <input type="email" id="email" name="email" required>
         <button type="submit" name="submit">Reset Password</button>
     </form>
- 
+    
 </body>
 </html>
 

@@ -22,7 +22,6 @@ if (isset($_GET['key']) && isset($_GET['email'])) {
 
     global $wpdb;
 
-    // Verify key and email
     $user = $wpdb->get_row(
         $wpdb->prepare(
             "SELECT * FROM $wpdb->users WHERE user_email = %s",

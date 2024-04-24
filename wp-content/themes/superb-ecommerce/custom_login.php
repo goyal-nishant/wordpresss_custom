@@ -1,18 +1,8 @@
 <?php
 //Template Name: Custom Login
 session_start(); 
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "dashbordproject";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failure: " . $conn->connect_error);
-}
-require_once('D:\xamp\htdocs\wordpress_dashbord\wp-load.php');
+global $wpdb;
+require_once(__DIR__ .'\..\..\..\wp-load.php');
 
 if (isset($_POST['btn_submit'])) {
     $username = $_POST['username'];

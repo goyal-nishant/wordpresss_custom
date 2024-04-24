@@ -2,22 +2,30 @@
 //Template Name: category posts
 session_start();
 
-define('WP_USE_THEMES', false);
-require_once('D:\xamp\htdocs\wordpress_dashbord\wp-load.php');
+// define('WP_USE_THEMES', false);
+require_once(__DIR__ . '/../../../wp-load.php');
 
 get_header();
 
 $category = $_GET['category'] ?? '';
 
+//  $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+ $paged = isset($_GET['paged']) ? $_GET['paged'] : 1;
 $args = array(
     'post_type'      => 'post',
     'post_status'    => 'publish',
-    'posts_per_page' => -1,
-    'category_name'  => $category,
+    'posts_per_page' => 2, 
+    'paged'          => $paged,
+    'tax_query'      => array(
+        array(
+            'taxonomy' => 'category',
+            'field'    => 'slug',
+            'terms'    => $category,
+        ),
+    ),
 );
 
 $query = new WP_Query($args);
-
 ?>
 
 <!DOCTYPE html>
@@ -86,6 +94,16 @@ $query = new WP_Query($args);
         .post-card a:hover {
             text-decoration: underline;
         }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            display: inline-block;
+            margin-right: 10px;
+        }
     </style>
 </head>
 
@@ -104,6 +122,25 @@ $query = new WP_Query($args);
                 </div>
         <?php
             endwhile;
+        ?>
+            <div class="pagination">
+                <?php
+               echo paginate_links(array(
+                'total'      => $query->max_num_pages,
+                'current'    => $paged,
+                'format'     => '?category=' . $category . '&paged=%#%',
+                'prev_next'  => true,
+                'prev_text'  => __('« Previous'),
+                'next_text'  => __('Next »'),
+                'type'       => 'list',
+                'add_args'   => array(
+                    'category' => $category,
+                ),
+            ));
+            
+                ?>
+            </div>
+        <?php
             wp_reset_postdata();
         else :
             echo "<p>No posts found for this category.</p>";

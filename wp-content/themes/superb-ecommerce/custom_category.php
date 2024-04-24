@@ -2,14 +2,45 @@
 //Template Name: category 
 
 session_start();
-require_once('D:\xamp\htdocs\wordpress_dashbord\wp-load.php');
+// Todo: use: __DIR__
+// practice require with different folder
+
+// Enqueue Scripts/Styles fils
+// Wordrpess Theme
+
+require_once(__DIR__ . '/../../../wp-load.php');
+function buildCategoryList($categories, $parent_id = 0)
+{
+    global $wpdb;
+
+    $child_categories = $wpdb->get_results(
+        $wpdb->prepare(
+            "
+                        SELECT wp_terms.term_id, wp_terms.name, wp_term_taxonomy.parent
+                        FROM {$wpdb->terms} wp_terms
+                        INNER JOIN {$wpdb->term_taxonomy} wp_term_taxonomy ON wp_terms.term_id = wp_term_taxonomy.term_id 
+                        WHERE wp_term_taxonomy.taxonomy = 'category' AND wp_term_taxonomy.parent = %d
+                        ",
+            $parent_id
+        )
+    );
+
+    if ($child_categories) {
+        foreach ($child_categories as $category) {
+            echo '<div class="category">';
+            echo '<a href="category_posts.php?category=' . $category->name . '">' . $category->name . '</a>';
+            buildCategoryList($categories, $category->term_id);
+            echo '</div>';
+        }
+    }
+}
 
 get_header();
 // wp_list_categories();
 // wp_dropdown_categories() ;
 //  wp_terms_checklist();
 
-$categories = get_categories(); 
+$categories = get_categories();
 // if ($categories) {
 //     foreach ($categories as $category) {
 //         echo '<input type="checkbox" id="category-' . $category->term_id . '" name="categories[]" value="' . $category->term_id . '">';
@@ -84,32 +115,8 @@ $categories = get_categories();
         </div>
         <div class="category-row">
             <?php
-            
-            function buildCategoryList($categories, $parent_id = 0)
-            {
-                global $wpdb;
-                
-                $child_categories = $wpdb->get_results(
-                    $wpdb->prepare(
-                        "
-                        SELECT wp_terms.term_id, wp_terms.name, wp_term_taxonomy.parent
-                        FROM {$wpdb->terms} wp_terms
-                        INNER JOIN {$wpdb->term_taxonomy} wp_term_taxonomy ON wp_terms.term_id = wp_term_taxonomy.term_id 
-                        WHERE wp_term_taxonomy.taxonomy = 'category' AND wp_term_taxonomy.parent = %d
-                        ",
-                        $parent_id
-                    )
-                );  
 
-                if ($child_categories) {
-                    foreach ($child_categories as $category) {
-                        echo '<div class="category">';
-                        echo '<a href="category_posts.php?category=' . $category->name . '">' . $category->name . '</a>';
-                        buildCategoryList($categories, $category->term_id);
-                        echo '</div>';
-                    }
-                }
-            }
+
 
             buildCategoryList($categories);
             ?>

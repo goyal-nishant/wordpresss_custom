@@ -13,7 +13,7 @@ function buildCategoryList($categories, $parent_id = 0)
 {
     global $wpdb;
 
-    $child_categories = $wpdb->get_results(
+    $child_categories = $wpdb->get_results( 
         $wpdb->prepare(
             "
                         SELECT wp_terms.term_id, wp_terms.name, wp_term_taxonomy.parent
@@ -28,9 +28,11 @@ function buildCategoryList($categories, $parent_id = 0)
     if ($child_categories) {
         foreach ($child_categories as $category) {
             echo '<div class="category">';
-            echo '<a href="category_posts.php?category=' . $category->name . '">' . $category->name . '</a>';
+           // echo '<a href="category_posts.php?category=' . $category->name . '">' . $category->name . '</a>';
+            echo '<a href="' . esc_url( add_query_arg( 'category', $category->name, get_permalink( 170 ) ) ) . '">' . $category->name . '</a>';
+
             buildCategoryList($categories, $category->term_id);
-            echo '</div>';
+            echo '</div>';  
         }
     }
 }
@@ -56,68 +58,15 @@ $categories = get_categories();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-    <style>
-        body {
-            background-color: #f8f9fa;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .category-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 25px;
-        }
-
-        .category {
-            width: calc(50% - 25px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 5px;
-        }
-
-        .category a {
-            text-decoration: none;
-            color: #333;
-            font-size: 18px;
-        }
-
-        .category a:hover {
-            color: #666;
-        }
-
-        .container {
-            flex: 1;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .card {
-            background-color: #f8f9fa;
-            padding: 10px 0;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-    </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="card">
+    <div class="custom-container">
+        <div class="custom-card">
             <h2 style="text-align: center;">Categories</h2>
         </div>
         <div class="category-row">
             <?php
-
-
-
             buildCategoryList($categories);
             ?>
         </div>

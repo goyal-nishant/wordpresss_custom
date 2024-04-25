@@ -1,4 +1,28 @@
 <?php
+add_filter( 'wp_nav_menu_objects', 'hide_logout_menu_item', 10, 2 );
+function hide_logout_menu_item( $items, $args ) {
+    if ( ! is_user_logged_in() ) {
+        foreach ( $items as $key => $item ) {
+            if ( 'Logout' === $item->title ) {
+                unset( $items[$key] );
+            }
+        }
+    }
+    return $items;
+}
+
+add_filter( 'wp_nav_menu_objects', 'hide_login_menu_item', 10, 2 );
+function hide_login_menu_item( $items, $args ) {
+    if ( is_user_logged_in() ) {
+        foreach ( $items as $key => $item ) {
+            if ( 'User Login' === $item->title ) {
+                unset( $items[$key] );
+            }
+        }
+    }
+    return $items;
+}
+
 
 function registration_form() {
     ob_start(); 
@@ -243,7 +267,9 @@ add_action('widgets_init', 'superb_ecommerce_widgets_init');
  * Enqueue scripts and styles.
  */
 function superb_ecommerce_scripts()
-{
+{   
+    wp_enqueue_style('superb-ecommerce-default' , get_template_directory_uri() . '/stylesheet/default.css');
+    wp_enqueue_style('superb-ecommerce-custom-category' , get_template_directory_uri() . '/stylesheet/custom_category.css');
     wp_enqueue_style('superb-ecommerce-font-awesome', get_template_directory_uri() . '/css/font-awesome.min.css');
     wp_enqueue_style('superb-ecommerce-style', get_stylesheet_uri());
     wp_enqueue_script('superb-ecommerce-navigation', get_template_directory_uri() . '/js/navigation.js', array('jquery'), '20170823', true);

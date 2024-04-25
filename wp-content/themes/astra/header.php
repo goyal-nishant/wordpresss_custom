@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <html <?php language_attributes(); ?>>
 <head>
 <?php astra_head_top(); ?>
+<link rel="stylesheet" href="<?php echo get_template_directory_uri() ?>/stylesheet/default.css" media="all" />
+<link rel="stylesheet" href="<?php echo get_template_directory_uri() ?>/stylesheet/custom_category.css" media="all" />
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <?php 

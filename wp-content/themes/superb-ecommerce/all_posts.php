@@ -12,7 +12,7 @@ $category = $_GET['category'] ?? '';
 $args = array(
     'post_type'      => 'post',
     'post_status'    => 'publish',
-    'posts_per_page' => 2, 
+    'posts_per_page' => 2,
     'paged'          => get_query_var('paged') ? get_query_var('paged') : 1,
     // 'tax_query'      => array(
     //     array(
@@ -25,7 +25,8 @@ $args = array(
 
 $query = new WP_Query($args);
 
-function view_posts($category,$query,$paged){
+function view_posts($category, $query)
+{
     echo paginate_links(array(
         'total'      => $query->max_num_pages,
         'current'    => get_query_var('paged') ? get_query_var('paged') : 1,
@@ -39,6 +40,8 @@ function view_posts($category,$query,$paged){
         ),
     ));
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -57,21 +60,24 @@ function view_posts($category,$query,$paged){
         if ($query->have_posts()) :
             while ($query->have_posts()) : $query->the_post();
         ?>
-                <div class='post-card'> 
+                <div class='post-card'>
                     <a href='<?php the_permalink(); ?>'><img src='<?php echo get_the_post_thumbnail_url(); ?>' style='height:500px' alt='<?php the_title(); ?>' /></a>
                     <div class='post-title'><?php the_title(); ?></div>
                     <div class='post-excerpt'><?php the_excerpt(); ?></div>
                     <a href='<?php the_permalink(); ?>'>Read more</a>
                 </div>
-        <?php
+            <?php
             endwhile;
-        ?>
+            ?>
+              <div class="sidebar">
+                    <?php if (is_active_sidebar('custom-sidebar')) : ?>
+                        <?php dynamic_sidebar('custom-sidebar'); ?>
+                    <?php endif; ?>
+                </div>
             <div class="pagination">
-
                 <?php
-                  view_posts($category,$query,$paged);
+                view_posts($category, $query, $paged);
                 ?>
-                
             </div>
         <?php
             wp_reset_postdata();
@@ -80,6 +86,7 @@ function view_posts($category,$query,$paged){
         endif;
         ?>
     </div>
+   
     <?php get_footer(); ?>
 </body>
 

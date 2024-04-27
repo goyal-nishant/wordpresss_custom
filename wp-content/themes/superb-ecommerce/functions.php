@@ -1,4 +1,283 @@
 <?php
+/*
+Plugin Name: Dashboard Widget
+Plugin URI:
+Description: Dashboard widget tutorial code
+Version: 1.0
+Author: CSSIgniter
+Author URI: https://www.cssigniter.com
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+//get post in dashboard
+add_action( 'wp_dashboard_setup', 'custom_ci_dashboard_add_widgets' );
+
+//give id, name of widget and callback function.
+function custom_ci_dashboard_add_widgets() {
+    wp_add_dashboard_widget( 'custom_dw_dashboard_widget_news', __( 'Custom News Widget', 'custom_dw' ), 'custom_dw_dashboard_widget_news_handler' );
+}
+
+function custom_dw_dashboard_widget_news_handler() {
+    
+    $args = array(
+        'post_type'      => 'post',
+        'posts_per_page' => -1, 
+    );
+
+    $query = new WP_Query( $args );
+
+    
+    if ( $query->have_posts() ) {
+        echo '<ul>';
+    
+        while ( $query->have_posts() ) {
+            $query->the_post();
+    
+            echo '<li><a href="' . esc_url( get_permalink() ) . '">' . get_the_title() . '</a></li>';
+        }
+        echo '</ul>';
+    
+        wp_reset_postdata();
+    } else {
+    
+        _e( 'No posts found.', 'custom_dw' );
+    }
+}
+
+//Add custom menu in admin
+add_action( 'admin_menu', 'custom_add_posts_menu_item' );
+
+function custom_add_posts_menu_item() {
+    
+    add_menu_page(
+        __( 'Custom Menu', 'custom_dw' ),
+        __( 'Custom Menu', 'custom_dw' ),
+        'edit_posts', 
+        'custom_dw_menu', 
+        'custom_dw_menu_page', 
+        'dashicons-admin-post',
+        20 
+    );
+
+    // Add submenu for posts if the user has the 'edit_posts' capability
+        add_submenu_page(
+            'custom_dw_menu', 
+            __( 'All Posts', 'custom_dw' ),
+            __( 'All Posts', 'custom_dw' ),
+            'edit_posts', 
+            'custom_dw_all_posts_page',
+            'custom_dw_all_posts_page_content'
+        );
+    
+
+    // Add submenu for page appearance
+    add_submenu_page(
+        'custom_dw_menu', 
+        __( 'Page Appearance', 'custom_dw' ),
+        __( 'Page Appearance', 'custom_dw' ),
+        'edit_theme_options', 
+        'custom_dw_page_appearance_page', 
+        'custom_dw_page_appearance_page_content' 
+    );
+
+    // Add submenu for settings
+    add_submenu_page(
+        'custom_dw_menu',
+        __( 'Settings', 'custom_dw' ),
+        __( 'Settings', 'custom_dw' ),
+        'manage_options', 
+        'custom_dw_settings_page', 
+        'custom_dw_settings_page_content'
+    );
+}
+
+function custom_dw_menu_page() {
+    echo '<div class="wrap"><h1>Welcome to Custom Menu</h1></div>';
+}
+//show table with feature image
+function custom_dw_all_posts_page_content() {
+    $paged = ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] ) ) ? absint( $_GET['paged'] ) : 1;
+    
+    $args = array(
+        'post_type'      => 'post',
+        'posts_per_page' => 4, 
+        'paged'          => $paged,
+    );
+    $query = new WP_Query( $args );
+
+    if ( $query->have_posts() ) {
+        echo '<div class="wrap">';
+        echo '<h1>All Posts</h1>';
+        echo '<table style="width:100%; border-collapse:collapse; border:1px solid #ddd;">';
+        echo '<thead>';
+        echo '<tr style="background-color:#f2f2f2;">';
+        echo '<th style="padding:10px; border:1px solid #ddd;">Featured Image</th>';
+        echo '<th style="padding:10px; border:1px solid #ddd;">Title</th>';
+        echo '<th style="padding:10px; border:1px solid #ddd;">Excerpt</th>';
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
+
+        while ( $query->have_posts() ) {
+            $query->the_post();
+            echo '<tr style="background-color:#f9f9f9;">';
+            echo '<td style="padding:10px; border:1px solid #ddd;">';
+            if ( has_post_thumbnail() ) {
+                echo '<img src="' . esc_url( get_the_post_thumbnail_url( get_the_ID(), 'thumbnail' ) ) . '" alt="' . esc_attr( get_the_title() ) . '" style="max-width:100px;">';
+            } else {
+                echo 'No Image';
+            }
+            echo '</td>';
+            echo '<td style="padding:10px; border:1px solid #ddd;"><a href="' . esc_url( get_permalink() ) . '">' . get_the_title() . '</a></td>';
+            echo '<td style="padding:10px; border:1px solid #ddd;">' . get_the_excerpt() . '</td>';
+            echo '</tr>';
+        }
+
+        echo '</tbody>';
+        echo '</table>';
+
+        echo '<div class="pagination">';
+        echo paginate_links( array(
+            'total'   => $query->max_num_pages,
+            'current' => $paged,
+        ) );
+        echo '</div>';
+
+        echo '</div>';
+        
+        wp_reset_postdata();
+    } else {
+        echo '<div class="wrap">';
+        echo '<h1>All Posts</h1>';
+        echo '<p>No posts found.</p>';
+        echo '</div>';
+    }
+}
+
+
+// function custom_dw_all_posts_page_content() {
+//     $paged = ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] ) ) ? absint( $_GET['paged'] ) : 1;
+    
+//     $args = array(
+//         'post_type'      => 'post',
+//         'posts_per_page' => 4, 
+//         'paged'          => $paged,
+//     );
+//     $query = new WP_Query( $args );
+
+//     if ( $query->have_posts() ) {
+//         echo '<div class="wrap">';
+//         echo '<h1>All Posts</h1>';
+//         echo '<table style="width:100%; border-collapse:collapse; border:1px solid #ddd;">';
+//         echo '<thead>';
+//         echo '<tr style="background-color:#f2f2f2;">';
+//         echo '<th style="padding:10px; border:1px solid #ddd;">Title</th>';
+//         echo '<th style="padding:10px; border:1px solid #ddd;">Excerpt</th>';
+//         echo '</tr>';
+//         echo '</thead>';
+//         echo '<tbody>';
+
+//         while ( $query->have_posts() ) {
+//             $query->the_post();
+//             echo '<tr style="background-color:#f9f9f9;">';
+//             echo '<td style="padding:10px; border:1px solid #ddd;"><a href="' . esc_url( get_permalink() ) . '">' . get_the_title() . '</a></td>';
+//             echo '<td style="padding:10px; border:1px solid #ddd;">' . get_the_excerpt() . '</td>';
+//             echo '</tr>';
+//         }
+
+//         echo '</tbody>';
+//         echo '</table>';
+
+//         echo '<div class="pagination">';
+//         echo paginate_links( array(
+//             'total'   => $query->max_num_pages,
+//             'current' => $paged,
+//         ) );
+//         echo '</div>';
+
+//         echo '</div>';
+        
+//         wp_reset_postdata();
+//     } else {
+//         echo '<div class="wrap">';
+//         echo '<h1>All Posts</h1>';
+//         echo '<p>No posts found.</p>';
+//         echo '</div>';
+//     }
+// }
+
+
+
+function custom_dw_page_appearance_page_content() {
+    echo '<div class="wrap"><h1>Page Appearance</h1></div>';
+}
+
+function custom_dw_settings_page_content() {
+    echo '<div class="wrap"><h1>Settings</h1></div>';
+}
+
+//custom menu inside admin dashboard
+// add_action( 'admin_menu', 'custom_add_custom_menu_page' );
+
+// function custom_add_custom_menu_page() {
+//     add_menu_page(
+//         __( 'Custom Menu', 'custom_dw' ), // Page title
+//         __( 'Custom Menu', 'custom_dw' ), // Menu title
+//         'edit_posts', // Capability required to access the page
+//         'custom-menu', // Page slug
+//         'custom_menu_page_callback', // Callback function to render page content
+//         'dashicons-admin-post', // Icon
+//         20 // Menu position
+//     );
+// }
+
+// function custom_menu_page_callback() {
+//     // Fetch and display your custom data here
+//     echo '<div class="wrap">';
+//     echo '<h1>' . __( 'Custom Menu Page', 'custom_dw' ) . '</h1>';
+//     echo '<p>This is a custom menu page. You can display your custom content here.</p>';
+//     echo '</div>';
+// }
+
+
+// Hide navbar for admin users
+function hide_navbar_for_admin() {
+    if (current_user_can('Administrator')) {
+        echo '<style>.top-nav-wrapper { display: none !important; }</style>';
+    }
+}
+add_action('admin_head', 'hide_navbar_for_admin');
+
+//Add widgets in custom template
+function mytheme_register_sidebar() {
+    register_sidebar( array(
+        'name'          => __( 'Custom Sidebar', 'mytheme' ),
+        'id'            => 'custom-sidebar',
+        'description'   => __( 'Widgets in this area will be shown on custom pages.', 'mytheme' ),
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h2 class="widget-title">',
+        'after_title'   => '</h2>',
+    ) );
+}
+add_action( 'widgets_init', 'mytheme_register_sidebar' );
+
+//Add widgets in custom template
+function theme_widgets_init() {
+    register_sidebar( array(
+        'name'          => __( 'Custom Widget Area', 'text_domain' ),
+        'id'            => 'custom-widget-area',
+        'description'   => 'Add widgets here to appear in your custom widget area.',
+        'before_widget' => '<li id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</li>',
+        'before_title'  => '<h2 class="widgettitle">',
+        'after_title'   => '</h2>',
+    ) );
+}
+add_action( 'widgets_init', 'theme_widgets_init' );
+
+// to hide menu links from menu at some scenario
 add_filter( 'wp_nav_menu_objects', 'hide_logout_menu_item', 10, 2 );
 function hide_logout_menu_item( $items, $args ) {
     if ( ! is_user_logged_in() ) {
@@ -11,6 +290,7 @@ function hide_logout_menu_item( $items, $args ) {
     return $items;
 }
 
+// to hide menu links from menu at some scenario
 add_filter( 'wp_nav_menu_objects', 'hide_login_menu_item', 10, 2 );
 function hide_login_menu_item( $items, $args ) {
     if ( is_user_logged_in() ) {
@@ -23,7 +303,7 @@ function hide_login_menu_item( $items, $args ) {
     return $items;
 }
 
-
+// Add shortcode
 function registration_form() {
     ob_start(); 
     get_template_part('registration-form-template');
@@ -33,6 +313,7 @@ function registration_form() {
 }
 add_shortcode('register', 'registration_form');
 
+// Add shortcode
 function subscribe_link()
 {
     ob_start(); 
@@ -42,6 +323,7 @@ function subscribe_link()
 }
 add_shortcode('subscribe', 'subscribe_link');
 
+// Add shortcode
 function forget() {
     ob_start(); 
     get_template_part('forget_custom_password');
@@ -268,6 +550,7 @@ add_action('widgets_init', 'superb_ecommerce_widgets_init');
  */
 function superb_ecommerce_scripts()
 {   
+    wp_enqueue_style('superb-ecommerce-default' , get_template_directory_uri() . '/stylesheet/display_none_navbar_.css');
     wp_enqueue_style('superb-ecommerce-default' , get_template_directory_uri() . '/stylesheet/default.css');
     wp_enqueue_style('superb-ecommerce-custom-category' , get_template_directory_uri() . '/stylesheet/custom_category.css');
     wp_enqueue_style('superb-ecommerce-font-awesome', get_template_directory_uri() . '/css/font-awesome.min.css');

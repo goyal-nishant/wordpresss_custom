@@ -37,7 +37,7 @@
 		</div>
 
 		<div class="site-info">
-			&copy;<?php echo date('Y'); ?> <?php bloginfo( 'name' ); ?>
+			&copy;<?php echo date('Y'); ?> <?php bloginfo( 'name' ); ?> dfdfgf
 			<!-- Delete below lines to remove copyright from footer -->
 			<span class="footer-info-right">
 				<?php echo __(' | WordPress Theme by', 'superb-ecommerce') ?> <a href="<?php echo esc_url('https://superbthemes.com/', 'superb-ecommerce'); ?>" rel="nofollow noopener"><?php echo __(' Superb WordPress Themes', 'superb-ecommerce') ?></a>

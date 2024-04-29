@@ -1,0 +1,93 @@
+.custom-admin-wrap {
+    margin-top: 20px;
+}
+
+.custom-admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-admin-table th,
+.custom-admin-table td {
+    padding: 10px;
+    border: 1px solid #e5e5e5; 
+}
+
+.custom-admin-pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.custom-admin-pagination a {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 0 4px;
+    background-color: #f7f7f7; 
+    border: 1px solid #ddd; 
+    color: black; 
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.custom-admin-pagination a:hover {
+    background-color: #e5e5e5; 
+}
+
+.custom-admin-pagination .current {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 0 4px;
+    background-color: #0073aa;; 
+    border: 1px solid #ddd; 
+    color: #ddd; 
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.custom-admin-pagination .prev,
+.custom-admin-pagination .next {
+    font-weight: bold;
+}
+
+.custom-admin-pagination a:focus {
+    outline: none; 
+}
+
+.custom-admin-pagination a:active {
+    transform: none; 
+}
+
+.custom-admin-image {
+    width: 100%;
+    height: auto; 
+    object-fit: cover; 
+}
+
+.custom-admin-feature-image {
+    width: 200px;
+}
+
+.custom-admin-title {
+    width: 200px;
+}
+
+  .dropdown-container {
+    margin-bottom: 20px;
+  }
+
+  /* Style for the label */
+  .dropdown-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  /* Style for the select dropdown */
+  .dropdown-select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 150px; /* Adjust width as needed */
+  }
+

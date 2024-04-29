@@ -34,12 +34,12 @@ use superb_ecommerce_SuperbThemesCustomizer\CustomizerControls;
 
 		<?php if (current_user_can('administrator')) : ?>
 			<?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'my-custom-menu',
-					'menu_class' => 'my-custom-menu'
-				)
-			);
+			// wp_nav_menu(
+			// 	array(
+			// 		'theme_location' => 'my-custom-menu',
+			// 		'menu_class' => 'my-custom-menu'
+			// 	)
+			// );
 			?>
 		<?php endif; ?>
 		<nav id="primary-site-navigation" class="primary-menu main-navigation clearfix">
